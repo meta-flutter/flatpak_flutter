@@ -1,4 +1,5 @@
 import 'package:flatpak_flutter/src/messages.g.dart';
+import 'package:flatpak_flutter/src/oars_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:ini/ini.dart';
 import 'package:xml/xml.dart';
@@ -68,114 +69,87 @@ class _MyHomePageState extends State<MyHomePage> {
   final api = FlatpakApi();
 
   void _printRemote(String tag, Remote remote) {
-    final name = remote.name;
-    final url = remote.url;
-    final collectionId = remote.collectionId;
-    final title = remote.title;
-    final comment = remote.comment;
-    final description = remote.description;
-    final homepage = remote.homepage;
-    final icon = remote.icon;
-    final defaultBranch = remote.defaultBranch;
-    final mainRef = remote.mainRef;
-    final remoteType = remote.remoteType;
-    final filter = remote.filter;
-    final appstreamTimestamp = DateTime.parse(remote.appstreamTimestamp);
-    final appstreamDir = remote.appstreamDir;
-    final gpgVerify = remote.gpgVerify;
-    final noEnumerate = remote.noEnumerate;
-    final noDeps = remote.noDeps;
-    final disabled = remote.disabled;
-    final prio = remote.prio;
-
     if (tag.isNotEmpty) {
       print("\t[$tag]");
     }
-    if (name.isNotEmpty) {
-      print("\tname: $name");
+    if (remote.name.isNotEmpty) {
+      print("\tname: ${remote.name}");
     }
-    if (url.isNotEmpty) {
-      print("\turl: $url");
+    if (remote.url.isNotEmpty) {
+      print("\turl: ${remote.url}");
     }
-    if (collectionId.isNotEmpty) {
-      print("\tcollectionId: $collectionId");
+    if (remote.collectionId.isNotEmpty) {
+      print("\tcollectionId: ${remote.collectionId}");
     }
-    if (title.isNotEmpty) {
-      print("\ttitle: $title");
+    if (remote.title.isNotEmpty) {
+      print("\ttitle: ${remote.title}");
     }
-    if (comment.isNotEmpty) {
-      print("\tcomment: $comment");
+    if (remote.comment.isNotEmpty) {
+      print("\tcomment: ${remote.comment}");
     }
-    if (description.isNotEmpty) {
-      print("\tdescription: $description");
+    if (remote.description.isNotEmpty) {
+      print("\tdescription: ${remote.description}");
     }
-    if (homepage.isNotEmpty) {
-      print("\thomepage: $homepage");
+    if (remote.homepage.isNotEmpty) {
+      print("\thomepage: ${remote.homepage}");
     }
-    if (icon.isNotEmpty) {
-      print("\ticon: $icon");
+    if (remote.icon.isNotEmpty) {
+      print("\ticon: ${remote.icon}");
     }
-    if (defaultBranch.isNotEmpty) {
-      print("\tdefaultBranch: $defaultBranch");
+    if (remote.defaultBranch.isNotEmpty) {
+      print("\tdefaultBranch: ${remote.defaultBranch}");
     }
-    if (mainRef.isNotEmpty) {
-      print("\tmainRef: $mainRef");
+    if (remote.mainRef.isNotEmpty) {
+      print("\tmainRef: ${remote.mainRef}");
     }
-    if (remoteType.isNotEmpty) {
-      print("\tremoteType: $remoteType");
+    if (remote.remoteType.isNotEmpty) {
+      print("\tremoteType: ${remote.remoteType}");
     }
-    if (filter.isNotEmpty) {
-      print("\tfilter: $filter");
+    if (remote.filter.isNotEmpty) {
+      print("\tfilter: ${remote.filter}");
     }
+
+    final appstreamTimestamp = DateTime.parse(remote.appstreamTimestamp);
     print("\tappstreamTimestamp: $appstreamTimestamp");
-    if (appstreamDir.isNotEmpty) {
-      print("\tappstreamDir: $appstreamDir");
+
+    if (remote.appstreamDir.isNotEmpty) {
+      print("\tappstreamDir: ${remote.appstreamDir}");
     }
-    print("\tgpgVerify: $gpgVerify");
-    print("\tnoEnumerate: $noEnumerate");
-    print("\tnoDeps: $noDeps");
-    print("\tdisabled: $disabled");
-    print("\tprio: $prio");
+    print("\tgpgVerify: ${remote.gpgVerify}");
+    print("\tnoEnumerate: ${remote.noEnumerate}");
+    print("\tnoDeps: ${remote.noDeps}");
+    print("\tdisabled: ${remote.disabled}");
+    print("\tprio: ${remote.prio}");
   }
 
   void _printInstallation(String tag, Installation installation) {
-    final id = installation.id;
-    final displayName = installation.displayName;
-    final path = installation.path;
-    final noInteraction = installation.noInteraction;
-    final isUser = installation.isUser;
-    final priority = installation.priority;
     if (tag.isNotEmpty) {
       print("[$tag]");
     }
-    if (id.isNotEmpty) {
-      print("id: $id");
+    if (installation.id.isNotEmpty) {
+      print("id: ${installation.id}");
     }
-    if (displayName.isNotEmpty) {
-      print("display_name: $displayName");
+    if (installation.displayName.isNotEmpty) {
+      print("display_name: ${installation.displayName}");
     }
-    if (path.isNotEmpty) {
-      print("path: $path");
+    if (installation.path.isNotEmpty) {
+      print("path: ${installation.path}");
     }
-    print("noInteraction: $noInteraction");
-    print("isUser: $isUser");
-    print("priority: $priority");
-    final defaultLanaguages = installation.defaultLanaguages;
-    for (String language in defaultLanaguages) {
+    print("noInteraction: ${installation.noInteraction}");
+    print("isUser: ${installation.isUser}");
+    print("priority: ${installation.priority}");
+    for (String language in installation.defaultLanaguages) {
       if (language.isNotEmpty) {
         print("language: $language");
       }
     }
-    final defaultLocales = installation.defaultLocale;
-    for (String locale in defaultLocales) {
+    for (String locale in installation.defaultLocale) {
       if (locale.isNotEmpty) {
         print("locale: $locale");
       }
     }
-    final remotes = installation.remotes;
-    final count = installation.remotes.length;
-    print("Remote Count: $count");
-    for (Remote remote in remotes) {
+    print("Remote Count: ${installation.remotes.length}");
+    for (Remote remote in installation.remotes) {
       _printRemote("Remote", remote);
     }
   }
@@ -211,6 +185,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return null;
   }
 
+  double _bytesToMib(int bytes) {
+    const int bytesInMib = 1024 * 1024; // 1 MiB = 1024 * 1024 bytes
+    return bytes / bytesInMib;
+  }
+
   void _incrementCounter() async {
     _version = await api.getVersion();
     _defaultArch = await api.getDefaultArch();
@@ -226,38 +205,35 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final applications = await api.getApplicationsInstalled();
     for (Application application in applications) {
-      final name = application.name;
-      final id = application.id;
-      final summary = application.summary;
-      final version = application.version;
-      final origin = application.origin;
-      final license = application.license;
-      final installedSize = application.installedSize;
-      final deployDir = application.deployDir;
-      final isCurrent = application.isCurrent;
-      final contentRatingType = application.contentRatingType;
-      final latestCommit = application.latestCommit;
-      final eol = application.eol;
-      final eolRebase = application.eolRebase;
-      final subpaths = application.subpaths;
-
       print("[Application]");
-      print("name: $name");
-      print("id: $id");
-      print("summary: $summary");
-      print("version: $version");
-      print("origin: $origin");
-      print("license: $license");
-      final installedSizeMb = installedSize / (1024 * 1024);
-      String installSizeMbString = installedSizeMb.toStringAsFixed(2);
-      print("installed_size: $installSizeMbString MB");
-      print("deploy_dir: $deployDir");
-      print("is_current: $isCurrent");
-      print("content_rating_type: $contentRatingType");
-      print("latest_commit: $latestCommit");
-      print("eol: $eol");
-      print("eol_rebase: $eolRebase");
-      for (String subpath in subpaths) {
+      print("name: ${application.name}");
+      print("id: ${application.id}");
+      print("summary: ${application.summary}");
+      print("version: ${application.version}");
+      print("origin: ${application.origin}");
+      print("license: ${application.license}");
+      print(
+          "installed_size: ${_bytesToMib(application.installedSize).toStringAsFixed(2)} MiB");
+      print("deploy_dir: ${application.deployDir}");
+      print("is_current: ${application.isCurrent}");
+      print("content_rating_type: ${application.contentRatingType}");
+      if (application.contentRating.isNotEmpty) {
+        Map<String, dynamic> ratings_map = {
+          for (var entry in application.contentRating.entries)
+            if (entry.key != null) entry.key!: entry.value
+        };
+        if (application.contentRatingType == "oars-1.1") {
+          final ratings = ContentRatingOarsOneDotOne.fromJson(ratings_map);
+          ratings.printRatings(application.contentRatingType);
+        } else if (application.contentRatingType == "oars-1.0") {
+          final ratings = ContentRatingOarsOneDotZero.fromJson(ratings_map);
+          ratings.printRatings(application.contentRatingType);
+        }
+      }
+      print("latest_commit: ${application.latestCommit}");
+      print("eol: ${application.eol}");
+      print("eol_rebase: ${application.eolRebase}");
+      for (String subpath in application.subpaths) {
         print("subpath: $subpath");
       }
 
@@ -328,7 +304,7 @@ class _MyHomePageState extends State<MyHomePage> {
           final iconFile = _xPathQuery(document,
               "//components[1]/component[1]/icon[@type='cached' and @height='64' and @width='64']");
           final iconPath =
-              "$deployDir/files/share/app-info/icons/flatpak/64x64/${iconFile!}";
+              "${application.deployDir}/files/share/app-info/icons/flatpak/64x64/${iconFile!}";
           if (File(iconPath).existsSync()) {
             print("\ticon: $iconPath");
           } else {

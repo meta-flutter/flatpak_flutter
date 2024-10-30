@@ -162,6 +162,7 @@ class Application {
     required this.deployDir,
     required this.isCurrent,
     required this.contentRatingType,
+    required this.contentRating,
     required this.latestCommit,
     required this.eol,
     required this.eolRebase,
@@ -190,6 +191,8 @@ class Application {
 
   String contentRatingType;
 
+  Map<String?, Object?> contentRating;
+
   String latestCommit;
 
   String eol;
@@ -214,6 +217,7 @@ class Application {
       deployDir,
       isCurrent,
       contentRatingType,
+      contentRating,
       latestCommit,
       eol,
       eolRebase,
@@ -236,12 +240,13 @@ class Application {
       deployDir: result[7]! as String,
       isCurrent: result[8]! as bool,
       contentRatingType: result[9]! as String,
-      latestCommit: result[10]! as String,
-      eol: result[11]! as String,
-      eolRebase: result[12]! as String,
-      subpaths: (result[13] as List<Object?>?)!.cast<String>(),
-      metadata: result[14]! as String,
-      appdata: result[15]! as String,
+      contentRating: (result[10] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
+      latestCommit: result[11]! as String,
+      eol: result[12]! as String,
+      eolRebase: result[13]! as String,
+      subpaths: (result[14] as List<Object?>?)!.cast<String>(),
+      metadata: result[15]! as String,
+      appdata: result[16]! as String,
     );
   }
 }
