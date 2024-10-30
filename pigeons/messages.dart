@@ -26,7 +26,6 @@ import 'package:pigeon/pigeon.dart';
   ),
   copyrightHeader: 'pigeons/copyright.txt',
 ))
-
 class Remote {
   final String name;
   final String url;
@@ -50,27 +49,26 @@ class Remote {
 
   final int prio;
 
-  Remote({
-    required this.name,
-    required this.url,
-    required this.collectionId,
-    required this.title,
-    required this.comment,
-    required this.description,
-    required this.homepage,
-    required this.icon,
-    required this.defaultBranch,
-    required this.mainRef,
-    required this.remoteType,
-    required this.filter,
-    required this.appstreamTimestamp,
-    required this.appstreamDir,
-    required this.gpgVerify,
-    required this.noEnumerate,
-    required this.noDeps,
-    required this.disabled,
-    required this.prio
-  });
+  Remote(
+      {required this.name,
+      required this.url,
+      required this.collectionId,
+      required this.title,
+      required this.comment,
+      required this.description,
+      required this.homepage,
+      required this.icon,
+      required this.defaultBranch,
+      required this.mainRef,
+      required this.remoteType,
+      required this.filter,
+      required this.appstreamTimestamp,
+      required this.appstreamDir,
+      required this.gpgVerify,
+      required this.noEnumerate,
+      required this.noDeps,
+      required this.disabled,
+      required this.prio});
 }
 
 class Application {
@@ -84,6 +82,7 @@ class Application {
   final String deployDir;
   final bool isCurrent;
   final String contentRatingType;
+  final Map<String?, Object?> contentRating;
   final String latestCommit;
   final String eol;
   final String eolRebase;
@@ -102,6 +101,7 @@ class Application {
     required this.deployDir,
     required this.isCurrent,
     required this.contentRatingType,
+    required this.contentRating,
     required this.latestCommit,
     required this.eol,
     required this.eolRebase,
