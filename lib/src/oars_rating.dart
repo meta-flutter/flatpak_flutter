@@ -45,48 +45,35 @@ class ContentRatingOarsOneDotZero {
     required this.violenceSexual,
   });
 
-  factory ContentRatingOarsOneDotZero.fromJson(Map<String, dynamic> json) {
+  factory ContentRatingOarsOneDotZero.fromJson(Map<String?, dynamic?> json) {
+    OarsRatingValue parseRating(String? rating) {
+      return OarsRatingValue.values.firstWhere(
+        (e) => e.toString() == "OarsRatingValue.$rating",
+        orElse: () => OarsRatingValue.unknown,
+      );
+    }
+
     return ContentRatingOarsOneDotZero(
-      drugsAlcohol: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['drugs-alcohol']}"),
-      drugsNarcotics: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['drugs-narcotics']}"),
-      drugsTobacco: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['drugs-tobacco']}"),
-      languageDiscrimination: OarsRatingValue.values.firstWhere((e) =>
-          e.toString() == "OarsRatingValue.${json['language-discrimination']}"),
-      languageHumor: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['language-humor']}"),
-      languageProfanity: OarsRatingValue.values.firstWhere((e) =>
-          e.toString() == "OarsRatingValue.${json['language-profanity']}"),
-      moneyGambling: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['money-gambling']}"),
-      moneyPurchasing: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['money-purchasing']}"),
-      sexNudity: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['sex-nudity']}"),
-      sexThemes: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['sex-themes']}"),
-      socialAudio: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['social-audio']}"),
-      socialChat: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['social-chat']}"),
-      socialContacts: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['social-contacts']}"),
-      socialInfo: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['social-info']}"),
-      socialLocation: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['social-location']}"),
-      violenceBloodshed: OarsRatingValue.values.firstWhere((e) =>
-          e.toString() == "OarsRatingValue.${json['violence-bloodshed']}"),
-      violenceCartoon: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['violence-cartoon']}"),
-      violenceFantasy: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['violence-fantasy']}"),
-      violenceRealistic: OarsRatingValue.values.firstWhere((e) =>
-          e.toString() == "OarsRatingValue.${json['violence-realistic']}"),
-      violenceSexual: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['violence-sexual']}"),
+      drugsAlcohol: parseRating(json['drugs-alcohol'] as String?),
+      drugsNarcotics: parseRating(json['drugs-narcotics'] as String?),
+      drugsTobacco: parseRating(json['drugs-tobacco'] as String?),
+      languageDiscrimination: parseRating(json['language-discrimination'] as String?),
+      languageHumor: parseRating(json['language-humor'] as String?),
+      languageProfanity: parseRating(json['language-profanity'] as String?),
+      moneyGambling: parseRating(json['money-gambling'] as String?),
+      moneyPurchasing: parseRating(json['money-purchasing'] as String?),
+      sexNudity: parseRating(json['sex-nudity'] as String?),
+      sexThemes: parseRating(json['sex-themes'] as String?),
+      socialAudio: parseRating(json['social-audio'] as String?),
+      socialChat: parseRating(json['social-chat'] as String?),
+      socialContacts: parseRating(json['social-contacts'] as String?),
+      socialInfo: parseRating(json['social-info'] as String?),
+      socialLocation: parseRating(json['social-location'] as String?),
+      violenceBloodshed: parseRating(json['violence-bloodshed'] as String?),
+      violenceCartoon: parseRating(json['violence-cartoon'] as String?),
+      violenceFantasy: parseRating(json['violence-fantasy'] as String?),
+      violenceRealistic: parseRating(json['violence-realistic'] as String?),
+      violenceSexual: parseRating(json['violence-sexual'] as String?),
     );
   }
 
@@ -96,11 +83,9 @@ class ContentRatingOarsOneDotZero {
     print("\tdrugs-alcohol: ${drugsAlcohol.toString().split('.').last}");
     print("\tdrugs-narcotics: ${drugsNarcotics.toString().split('.').last}");
     print("\tdrugs-tobacco: ${drugsTobacco.toString().split('.').last}");
-    print(
-        "\tlanguage-discrimination: ${languageDiscrimination.toString().split('.').last}");
+    print("\tlanguage-discrimination: ${languageDiscrimination.toString().split('.').last}");
     print("\tlanguage-humor: ${languageHumor.toString().split('.').last}");
-    print(
-        "\tlanguage-profanity: ${languageProfanity.toString().split('.').last}");
+    print("\tlanguage-profanity: ${languageProfanity.toString().split('.').last}");
     print("\tmoney-gambling: ${moneyGambling.toString().split('.').last}");
     print("\tmoney-purchasing: ${moneyPurchasing.toString().split('.').last}");
     print("\tsex-nudity: ${sexNudity.toString().split('.').last}");
@@ -110,12 +95,10 @@ class ContentRatingOarsOneDotZero {
     print("\tsocial-contacts: ${socialContacts.toString().split('.').last}");
     print("\tsocial-info: ${socialInfo.toString().split('.').last}");
     print("\tsocial-location: ${socialLocation.toString().split('.').last}");
-    print(
-        "\tviolence-bloodshed: ${violenceBloodshed.toString().split('.').last}");
+    print("\tviolence-bloodshed: ${violenceBloodshed.toString().split('.').last}");
     print("\tviolence-cartoon: ${violenceCartoon.toString().split('.').last}");
     print("\tviolence-fantasy: ${violenceFantasy.toString().split('.').last}");
-    print(
-        "\tviolence-realistic: ${violenceRealistic.toString().split('.').last}");
+    print("\tviolence-realistic: ${violenceRealistic.toString().split('.').last}");
     print("\tviolence-sexual: ${violenceSexual.toString().split('.').last}");
   }
 }
@@ -162,59 +145,44 @@ class ContentRatingOarsOneDotOne {
     required this.socialLocation,
     required this.violenceBloodshed,
     required this.violenceCartoon,
-    required this.violenceDesecration, //
+    required this.violenceDesecration,
     required this.violenceFantasy,
     required this.violenceRealistic,
     required this.violenceSexual,
     required this.violenceSlavery,
   });
 
-  factory ContentRatingOarsOneDotOne.fromJson(Map<String, dynamic> json) {
+  factory ContentRatingOarsOneDotOne.fromJson(Map<String?, dynamic?> json) {
+    OarsRatingValue parseRating(String? rating) {
+      return OarsRatingValue.values.firstWhere(
+        (e) => e.toString() == "OarsRatingValue.$rating",
+        orElse: () => OarsRatingValue.unknown,
+      );
+    }
+
     return ContentRatingOarsOneDotOne(
-      drugsAlcohol: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['drugs-alcohol']}"),
-      drugsNarcotics: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['drugs-narcotics']}"),
-      drugsTobacco: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['drugs-tobacco']}"),
-      languageDiscrimination: OarsRatingValue.values.firstWhere((e) =>
-          e.toString() == "OarsRatingValue.${json['language-discrimination']}"),
-      languageHumor: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['language-humor']}"),
-      languageProfanity: OarsRatingValue.values.firstWhere((e) =>
-          e.toString() == "OarsRatingValue.${json['language-profanity']}"),
-      moneyGambling: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['money-gambling']}"),
-      moneyPurchasing: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['money-purchasing']}"),
-      sexNudity: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['sex-nudity']}"),
-      sexThemes: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['sex-themes']}"),
-      socialAudio: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['social-audio']}"),
-      socialChat: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['social-chat']}"),
-      socialContacts: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['social-contacts']}"),
-      socialInfo: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['social-info']}"),
-      socialLocation: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['social-location']}"),
-      violenceBloodshed: OarsRatingValue.values.firstWhere((e) =>
-          e.toString() == "OarsRatingValue.${json['violence-bloodshed']}"),
-      violenceCartoon: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['violence-cartoon']}"),
-      violenceFantasy: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['violence-fantasy']}"),
-      violenceDesecration: OarsRatingValue.values.firstWhere((e) =>
-          e.toString() == "OarsRatingValue.${json['violence-desecration']}"),
-      violenceRealistic: OarsRatingValue.values.firstWhere((e) =>
-          e.toString() == "OarsRatingValue.${json['violence-realistic']}"),
-      violenceSexual: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['violence-sexual']}"),
-      violenceSlavery: OarsRatingValue.values.firstWhere(
-          (e) => e.toString() == "OarsRatingValue.${json['violence-slavery']}"),
+      drugsAlcohol: parseRating(json['drugs-alcohol'] as String?),
+      drugsNarcotics: parseRating(json['drugs-narcotics'] as String?),
+      drugsTobacco: parseRating(json['drugs-tobacco'] as String?),
+      languageDiscrimination: parseRating(json['language-discrimination'] as String?),
+      languageHumor: parseRating(json['language-humor'] as String?),
+      languageProfanity: parseRating(json['language-profanity'] as String?),
+      moneyGambling: parseRating(json['money-gambling'] as String?),
+      moneyPurchasing: parseRating(json['money-purchasing'] as String?),
+      sexNudity: parseRating(json['sex-nudity'] as String?),
+      sexThemes: parseRating(json['sex-themes'] as String?),
+      socialAudio: parseRating(json['social-audio'] as String?),
+      socialChat: parseRating(json['social-chat'] as String?),
+      socialContacts: parseRating(json['social-contacts'] as String?),
+      socialInfo: parseRating(json['social-info'] as String?),
+      socialLocation: parseRating(json['social-location'] as String?),
+      violenceBloodshed: parseRating(json['violence-bloodshed'] as String?),
+      violenceCartoon: parseRating(json['violence-cartoon'] as String?),
+      violenceDesecration: parseRating(json['violence-desecration'] as String?),
+      violenceFantasy: parseRating(json['violence-fantasy'] as String?),
+      violenceRealistic: parseRating(json['violence-realistic'] as String?),
+      violenceSexual: parseRating(json['violence-sexual'] as String?),
+      violenceSlavery: parseRating(json['violence-slavery'] as String?),
     );
   }
 
@@ -224,11 +192,9 @@ class ContentRatingOarsOneDotOne {
     print("\tdrugs-alcohol: ${drugsAlcohol.toString().split('.').last}");
     print("\tdrugs-narcotics: ${drugsNarcotics.toString().split('.').last}");
     print("\tdrugs-tobacco: ${drugsTobacco.toString().split('.').last}");
-    print(
-        "\tlanguage-discrimination: ${languageDiscrimination.toString().split('.').last}");
+    print("\tlanguage-discrimination: ${languageDiscrimination.toString().split('.').last}");
     print("\tlanguage-humor: ${languageHumor.toString().split('.').last}");
-    print(
-        "\tlanguage-profanity: ${languageProfanity.toString().split('.').last}");
+    print("\tlanguage-profanity: ${languageProfanity.toString().split('.').last}");
     print("\tmoney-gambling: ${moneyGambling.toString().split('.').last}");
     print("\tmoney-purchasing: ${moneyPurchasing.toString().split('.').last}");
     print("\tsex-nudity: ${sexNudity.toString().split('.').last}");
@@ -238,14 +204,11 @@ class ContentRatingOarsOneDotOne {
     print("\tsocial-contacts: ${socialContacts.toString().split('.').last}");
     print("\tsocial-info: ${socialInfo.toString().split('.').last}");
     print("\tsocial-location: ${socialLocation.toString().split('.').last}");
-    print(
-        "\tviolence-bloodshed: ${violenceBloodshed.toString().split('.').last}");
+    print("\tviolence-bloodshed: ${violenceBloodshed.toString().split('.').last}");
     print("\tviolence-cartoon: ${violenceCartoon.toString().split('.').last}");
     print("\tviolence-fantasy: ${violenceFantasy.toString().split('.').last}");
-    print(
-        "\tviolence-desecration: ${violenceDesecration.toString().split('.').last}");
-    print(
-        "\tviolence-realistic: ${violenceRealistic.toString().split('.').last}");
+    print("\tviolence-desecration: ${violenceDesecration.toString().split('.').last}");
+    print("\tviolence-realistic: ${violenceRealistic.toString().split('.').last}");
     print("\tviolence-sexual: ${violenceSexual.toString().split('.').last}");
     print("\tviolence-slavery: ${violenceSlavery.toString().split('.').last}");
   }
