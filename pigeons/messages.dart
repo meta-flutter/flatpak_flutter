@@ -118,7 +118,7 @@ class Installation {
   final bool noInteraction;
   final bool isUser;
   final int priority;
-  List<String> defaultLanaguages;
+  List<String> defaultLanguages;
   List<String> defaultLocale;
   List<Remote> remotes;
 
@@ -129,7 +129,7 @@ class Installation {
     required this.noInteraction,
     required this.isUser,
     required this.priority,
-    required this.defaultLanaguages,
+    required this.defaultLanguages,
     required this.defaultLocale,
     required this.remotes,
   });
@@ -162,7 +162,7 @@ abstract class FlatpakApi {
   List<Application> getApplicationsInstalled();
 
   /// Get list of applications hosted on a remote.
-  List<Remote> getApplicationsRemote(String id);
+  List<Application> getApplicationsRemote(String id);
 
   /// Install application of given id.
   bool applicationInstall(String id);

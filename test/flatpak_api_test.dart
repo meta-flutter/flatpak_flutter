@@ -104,7 +104,7 @@ void main() {
           noInteraction: false,
           isUser: true,
           priority: 0,
-          defaultLanaguages: ['en'],
+          defaultLanguages: ['en'],
           defaultLocale: ['en_US.UTF-8'],
           remotes: [],
         );
@@ -136,7 +136,7 @@ void main() {
           noInteraction: false,
           isUser: false,
           priority: 1,
-          defaultLanaguages: ['en'],
+          defaultLanguages: ['en'],
           defaultLocale: ['en_US.UTF-8'],
           remotes: [],
         );
@@ -407,14 +407,14 @@ void main() {
         noInteraction: false,
         isUser: false,
         priority: 1,
-        defaultLanaguages: ['en', 'es'],
+        defaultLanguages: ['en', 'es'],
         defaultLocale: ['en_US.UTF-8'],
         remotes: [],
       );
 
       expect(installation.isUser, isFalse);
       expect(installation.priority, equals(1));
-      expect(installation.defaultLanaguages, contains('en'));
+      expect(installation.defaultLanguages, contains('en'));
     });
   });
 

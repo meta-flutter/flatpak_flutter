@@ -138,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print("noInteraction: ${installation.noInteraction}");
     print("isUser: ${installation.isUser}");
     print("priority: ${installation.priority}");
-    for (String language in installation.defaultLanaguages) {
+    for (String language in installation.defaultLanguages) {
       if (language.isNotEmpty) {
         print("language: $language");
       }
