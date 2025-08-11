@@ -329,6 +329,52 @@ class _MyHomePageState extends State<MyHomePage> {
               });
             }
           }
+          for (Installation installation in [installation, ...systemInstallations]) {
+            for (Remote remote in installation.remotes) {
+              if (!remote.disabled) {
+                try {
+                  final remoteApplications = await api.getApplicationsRemote(remote.name);
+                  if (remoteApplications.isNotEmpty) {
+                    print("\n[Remote Applications from ${remote.name}]");
+                    print("Remote: ${remote.name} (${remote.url})");
+                    print("Applications count: ${remoteApplications.length}");
+                    
+                    for (Application app in remoteApplications) {
+                      print("\t[Remote Application]");
+                      print("\tname: ${app.name}");
+                      print("\tid: ${app.id}");
+                      print("\tsummary: ${app.summary}");
+                      print("\tversion: ${app.version}");
+                      print("\torigin: ${app.origin}");
+                      print("\tlicense: ${app.license}");
+                      print("\tinstalled_size: ${_bytesToMib(app.installedSize).toStringAsFixed(2)} MiB");
+                      print("\tdeploy_dir: ${app.deployDir}");
+                      print("\tis_current: ${app.isCurrent}");
+                      print("\tcontent_rating_type: ${app.contentRatingType}");
+                      if (app.contentRating.isNotEmpty) {
+                        print("\tcontent_rating: ${app.contentRating}");
+                      }
+                      print("\tlatest_commit: ${app.latestCommit}");
+                      print("\teol: ${app.eol}");
+                      print("\teol_rebase: ${app.eolRebase}");
+                      for (String subpath in app.subpaths) {
+                        print("\tsubpath: $subpath");
+                      }
+                      if (app.metadata.isNotEmpty) {
+                        print("\tmetadata: ${app.metadata}");
+                      }
+                      if (app.appdata.isNotEmpty) {
+                        print("\tappdata: ${app.appdata}");
+                      }
+                      print("");
+                    }
+                  }
+                } catch (e) {
+                  print("Error getting applications from remote ${remote.name}: $e");
+                }
+              }
+            }
+          }
         }
       }
     }
