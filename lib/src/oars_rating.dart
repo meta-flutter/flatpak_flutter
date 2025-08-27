@@ -45,7 +45,7 @@ class ContentRatingOarsOneDotZero {
     required this.violenceSexual,
   });
 
-  factory ContentRatingOarsOneDotZero.fromJson(Map<String?, dynamic?> json) {
+  factory ContentRatingOarsOneDotZero.fromJson(Map<String?, dynamic> json) {
     OarsRatingValue parseRating(String? rating) {
       return OarsRatingValue.values.firstWhere(
         (e) => e.toString() == "OarsRatingValue.$rating",
@@ -152,7 +152,7 @@ class ContentRatingOarsOneDotOne {
     required this.violenceSlavery,
   });
 
-  factory ContentRatingOarsOneDotOne.fromJson(Map<String?, dynamic?> json) {
+  factory ContentRatingOarsOneDotOne.fromJson(Map<String?, dynamic> json) {
     OarsRatingValue parseRating(String? rating) {
       return OarsRatingValue.values.firstWhere(
         (e) => e.toString() == "OarsRatingValue.$rating",

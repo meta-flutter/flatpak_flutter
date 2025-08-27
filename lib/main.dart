@@ -218,15 +218,15 @@ class _MyHomePageState extends State<MyHomePage> {
       print("is_current: ${application.isCurrent}");
       print("content_rating_type: ${application.contentRatingType}");
       if (application.contentRating.isNotEmpty) {
-        Map<String, dynamic> ratings_map = {
+        Map<String, dynamic> ratingsMap = {
           for (var entry in application.contentRating.entries)
             if (entry.key != null) entry.key!: entry.value
         };
         if (application.contentRatingType == "oars-1.1") {
-          final ratings = ContentRatingOarsOneDotOne.fromJson(ratings_map);
+          final ratings = ContentRatingOarsOneDotOne.fromJson(ratingsMap);
           ratings.printRatings(application.contentRatingType);
         } else if (application.contentRatingType == "oars-1.0") {
-          final ratings = ContentRatingOarsOneDotZero.fromJson(ratings_map);
+          final ratings = ContentRatingOarsOneDotZero.fromJson(ratingsMap);
           ratings.printRatings(application.contentRatingType);
         }
       }

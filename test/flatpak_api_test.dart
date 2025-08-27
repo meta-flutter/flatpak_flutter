@@ -39,7 +39,7 @@ void main() {
       test('getVersion returns correct version string', () async {
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockDecodedMessageHandler<Object?>(
-          BasicMessageChannel<Object?>(
+          const BasicMessageChannel<Object?>(
             'dev.flutter.pigeon.flatpak_flutter.FlatpakApi.getVersion',
             FlatpakApi.pigeonChannelCodec, // Access through class name
           ),
@@ -60,7 +60,7 @@ void main() {
       test('getDefaultArch returns correct architecture', () async {
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockDecodedMessageHandler<Object?>(
-          BasicMessageChannel<Object?>(
+          const BasicMessageChannel<Object?>(
             'dev.flutter.pigeon.flatpak_flutter.FlatpakApi.getDefaultArch',
             FlatpakApi.pigeonChannelCodec, 
           ),
@@ -78,7 +78,7 @@ void main() {
       test('getSupportedArches returns list of architectures', () async {
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockDecodedMessageHandler<Object?>(
-          BasicMessageChannel<Object?>(
+          const BasicMessageChannel<Object?>(
             'dev.flutter.pigeon.flatpak_flutter.FlatpakApi.getSupportedArches',
             FlatpakApi.pigeonChannelCodec,
           ),
@@ -111,7 +111,7 @@ void main() {
 
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockDecodedMessageHandler<Object?>(
-          BasicMessageChannel<Object?>(
+          const BasicMessageChannel<Object?>(
             'dev.flutter.pigeon.flatpak_flutter.FlatpakApi.getUserInstallation',
             FlatpakApi.pigeonChannelCodec,
           ),
@@ -143,7 +143,7 @@ void main() {
 
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockDecodedMessageHandler<Object?>(
-          BasicMessageChannel<Object?>(
+          const BasicMessageChannel<Object?>(
             'dev.flutter.pigeon.flatpak_flutter.FlatpakApi.getSystemInstallations',
             FlatpakApi.pigeonChannelCodec,
           ),
@@ -168,7 +168,7 @@ void main() {
       test('remoteAdd successfully adds remote', () async {
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockDecodedMessageHandler<Object?>(
-          BasicMessageChannel<Object?>(
+          const BasicMessageChannel<Object?>(
             'dev.flutter.pigeon.flatpak_flutter.FlatpakApi.remoteAdd',
             FlatpakApi.pigeonChannelCodec,
           ),
@@ -214,7 +214,7 @@ void main() {
       test('remoteRemove successfully removes remote', () async {
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockDecodedMessageHandler<Object?>(
-          BasicMessageChannel<Object?>(
+          const BasicMessageChannel<Object?>(
             'dev.flutter.pigeon.flatpak_flutter.FlatpakApi.remoteRemove',
             FlatpakApi.pigeonChannelCodec,
           ),
@@ -258,7 +258,7 @@ void main() {
 
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockDecodedMessageHandler<Object?>(
-          BasicMessageChannel<Object?>(
+          const BasicMessageChannel<Object?>(
             'dev.flutter.pigeon.flatpak_flutter.FlatpakApi.getApplicationsInstalled',
             FlatpakApi.pigeonChannelCodec,
           ),
@@ -282,7 +282,7 @@ void main() {
       test('applicationInstall succeeds for valid app ID', () async {
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockDecodedMessageHandler<Object?>(
-          BasicMessageChannel<Object?>(
+          const BasicMessageChannel<Object?>(
             'dev.flutter.pigeon.flatpak_flutter.FlatpakApi.applicationInstall',
             FlatpakApi.pigeonChannelCodec,
           ),
@@ -306,7 +306,7 @@ void main() {
       test('platform exceptions are properly thrown', () async {
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockDecodedMessageHandler<Object?>(
-          BasicMessageChannel<Object?>(
+          const BasicMessageChannel<Object?>(
             'dev.flutter.pigeon.flatpak_flutter.FlatpakApi.getVersion',
             FlatpakApi.pigeonChannelCodec,
           ),
@@ -326,7 +326,7 @@ void main() {
       test('null responses throw appropriate errors', () async {
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockDecodedMessageHandler<Object?>(
-          BasicMessageChannel<Object?>(
+          const BasicMessageChannel<Object?>(
             'dev.flutter.pigeon.flatpak_flutter.FlatpakApi.getVersion',
             FlatpakApi.pigeonChannelCodec,
           ),
