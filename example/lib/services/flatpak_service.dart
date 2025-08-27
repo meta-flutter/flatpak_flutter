@@ -35,4 +35,8 @@ class FlatpakService {
   Future<bool> remoteRemove(String remoteName) async {
     return await _api.remoteRemove(remoteName);
   }
+
+  Future<List<String?>> getSupportedArches()  {
+    return  _api.getSupportedArches();
+  }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flatpak_flutter/src/messages.g.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import '../services/flatpak_service.dart';
 
 class RemotesScreen extends StatefulWidget {
@@ -16,7 +15,7 @@ class _RemotesScreenState extends State<RemotesScreen> {
   bool _isLoading = false;
   String _currentRemote = '';
   String _errorMessage = '';
-  List<String> _availableRemotes = [];
+  final List<String> _availableRemotes = [];
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override

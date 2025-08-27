@@ -39,6 +39,8 @@ dependencies:
   iconsax: ^0.0.8
   get: ^4.7.2
   flutter_form_builder: ^10.1.0
+  flutter_svg: ^2.0.13
+  carousel_slider: ^5.1.1
 
 dev_dependencies:
   flutter_test:
@@ -54,7 +56,6 @@ dev_dependencies:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter packages.
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -62,10 +63,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
+    - assets/logos/
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
