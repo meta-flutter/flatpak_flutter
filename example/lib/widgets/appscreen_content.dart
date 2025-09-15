@@ -8,8 +8,9 @@ import 'package:intl/intl.dart';
 import 'package:flatpak_flutter_example/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flatpak_flutter/src/messages.g.dart';
+import 'package:flatpak_flutter_example/services/AppProvider.dart';
 
-import 'package:flatpak_flutter_example/services/flatpak_service.dart';
+import 'package:provider/provider.dart';
 import 'app_info.dart';
 
 class AppscreenContent extends StatefulWidget{
@@ -24,9 +25,6 @@ class AppscreenContent extends StatefulWidget{
 }
 
 class _AppscreenContentState extends State<AppscreenContent>{
-  final FlatpakService _flatpakService = FlatpakService();
-  final bool _isInstalling = false;
-  final bool _isUninstalling = false;
 
   @override
   Widget build(BuildContext context) {
@@ -253,36 +251,48 @@ class _AppscreenContentState extends State<AppscreenContent>{
       maxSize: 56,
     );
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(9999),
-      child: BackdropFilter(
-          filter:ImageFilter.blur(
-              sigmaX: 10,
-              sigmaY: 10,
-          ),
-        child: Container(
-          width: buttonW,
-          height: buttonH,
-          decoration: BoxDecoration(
-            color: Color(0xFF2563EB),
-            borderRadius: BorderRadius.circular(9999),
-            border: Border.all(
-              width: 1.5,
-              color: Colors.white.withValues(alpha: 0.3),
-            )
-          ),
-          child: Center(
-            child: Text(
-              "Install",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w300,
-                fontSize: 16
+    return Consumer<AppsProvider>(
+        builder: (context, appsProvider, child){
+        final isInstalled = appsProvider.isAppInstalled(widget.app.id);
+        final isInstalling = appsProvider.isAppInstalling(widget.app.id);
+        print(isInstalled);
+       return GestureDetector(
+         onTap: isInstalled || isInstalling ? null : () async {
+           final success = await appsProvider.installApp(widget.app.id);
+           },
+         child: ClipRRect(
+          borderRadius: BorderRadius.circular(9999),
+          child: BackdropFilter(
+              filter:ImageFilter.blur(
+                  sigmaX: 10,
+                  sigmaY: 10,
+              ),
+            child: Container(
+              width: buttonW,
+              height: buttonH,
+              decoration: BoxDecoration(
+                color: Color(0xFF2563EB),
+                borderRadius: BorderRadius.circular(9999),
+                border: Border.all(
+                  width: 1.5,
+                  color: Colors.white.withValues(alpha: 0.3),
+                )
+              ),
+              child: Center(
+                child: Text(
+                  isInstalled ? "Open": isInstalling? "Installing..": "Install",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 16
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
+          ),
+      );
+      },
     );
   }
 

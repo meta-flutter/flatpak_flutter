@@ -41,6 +41,8 @@ dependencies:
   flutter_form_builder: ^10.1.0
   flutter_svg: ^2.0.13
   carousel_slider: ^5.1.1
+  provider: ^6.0.5
+  gap: ^3.0.1
 
 dev_dependencies:
   flutter_test:
