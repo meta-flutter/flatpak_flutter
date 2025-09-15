@@ -1,7 +1,7 @@
-
-import 'package:flatpak_flutter_example/services/search_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flatpak_flutter/src/messages.g.dart';
+import 'package:provider/provider.dart';
+import '../services/AppProvider.dart';
 import '../services/flatpak_service.dart';
 import '../widgets/appscreen_content.dart';
 import '../widgets/appscreen_head.dart';
@@ -18,33 +18,25 @@ class AppsScreen extends StatefulWidget {
 
 class _AppsScreenState extends State<AppsScreen> {
   final FlatpakService _flatpakService = FlatpakService();
-  final SearchService _SearchService = SearchService();
-  final bool _isLoading = false;
-  final String _errorMessage = '';
-
-
-  bool _isInitialized = true;
 
   @override
   void initState() {
     super.initState();
-    _initializedata();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _appsInit();
+    });
   }
 
-  Future<void> _initializedata() async {
-    setState(() {
-      _isInitialized = true;
-    });
-
-    try{
-      await _SearchService.init();
-    }catch(e){
-      print('error in initialize search: $e');
+  Future<void> _appsInit() async{
+    final appStateProvider = Provider.of<AppStateProvider>(context, listen: false);
+    final appsProvider = Provider.of<AppsProvider>(context, listen: false);
+    appStateProvider.clearError();
+    appStateProvider.setInitialize(true);
+    if (appsProvider.availableRemotes.isEmpty) {
+      await appsProvider.initialize();
     }
-
-    setState(() {
-      _isInitialized = false;
-    });
+    await appsProvider.refreshInstallationStatus();
+    appStateProvider.setInitialize(false);
   }
 
   @override
@@ -64,17 +56,4 @@ class _AppsScreenState extends State<AppsScreen> {
 
   @override
   Size get preferredSize => const Size.fromHeight(70);
-
-  void _uninstallApplication(Application app) {
-    _flatpakService.ApplicationUninstall(app.id);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Uninstalling ${app.name}...'),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
-
-
 }

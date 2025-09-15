@@ -2,16 +2,16 @@ import 'dart:io';
 import 'dart:ui';
 import 'dart:convert';
 import 'package:flatpak_flutter_example/responsive.dart';
+import 'package:flatpak_flutter_example/services/AppProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flatpak_flutter/src/messages.g.dart';
+import 'package:provider/provider.dart';
 
 class AppCard extends StatefulWidget {
   final Application application;
   final String? name;
   final String? summary;
   final String? iconPath;
-  final bool? isInstalled;
-  final bool? isInstalling;
   final VoidCallback? onInstall;
   final VoidCallback? onTap;
 
@@ -21,8 +21,6 @@ class AppCard extends StatefulWidget {
     this.name,
     this.summary,
     this.iconPath,
-    this.isInstalled,
-    this.isInstalling,
     this.onInstall,
     this.onTap,
   });
@@ -79,18 +77,6 @@ class _AppCardState extends State<AppCard> with TickerProviderStateMixin {
   }
 
   @override
-  void didUpdateWidget(AppCard oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (widget.isInstalling == true && oldWidget.isInstalling != true) {
-      _loadingController.repeat();
-    } else if (widget.isInstalling != true && oldWidget.isInstalling == true) {
-      _loadingController.stop();
-      _loadingController.reset();
-    }
-  }
-
-  @override
   void dispose() {
     _hoverController.dispose();
     _loadingController.dispose();
@@ -137,7 +123,7 @@ class _AppCardState extends State<AppCard> with TickerProviderStateMixin {
               child: Container(
                 width: cardWidth,
                 height: cardHeight,
-                margin: const EdgeInsets.all(8),
+                margin: EdgeInsets.all(Responsive.scale(context, 12.0).clamp(10.0, 16.0)),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
@@ -291,69 +277,102 @@ class _AppCardState extends State<AppCard> with TickerProviderStateMixin {
   }
 
   Widget _buildGetButton(BuildContext context) {
-    final isInstalling = widget.isInstalling == true;
-    final isInstalled = widget.isInstalled == true;
 
-    return GestureDetector(
-      onTap: isInstalling ? null : widget.onInstall,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 10,
-            sigmaY: 10,
-          ),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-            decoration: BoxDecoration(
-              color: isInstalling
-                  ? Colors.grey.withValues(alpha: 0.8)
-                  : Colors.black87,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                width: 1.5,
-                color: Colors.white.withValues(alpha: 0.3),
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (isInstalling)
-                  AnimatedBuilder(
-                    animation: _rotationAnimation,
-                    builder: (context, child) {
-                      return Transform.rotate(
-                        angle: _rotationAnimation.value * 2.0 * 3.141592653589793,
-                        child: const SizedBox(
-                          width: 14,
-                          height: 14,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                          ),
-                        ),
-                      );
-                    },
+
+    return Consumer<AppsProvider>(
+      builder: (context, appsProvider, child) {
+        final isInstalling = appsProvider.isAppInstalling(widget.application.id);
+        final isInstalled = appsProvider.isAppInstalled(widget.application.id);
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (isInstalling && !_loadingController.isAnimating) {
+            _loadingController.repeat();
+          } else if (!isInstalling && _loadingController.isAnimating) {
+            _loadingController.stop();
+            _loadingController.reset();
+          }
+        });
+        return GestureDetector(
+          onTap: () async {
+            if (isInstalled || isInstalling) {
+              await appsProvider.openApp(widget.application.id);
+            } else {
+              final provider = Provider.of<AppsProvider>(context, listen: false);
+              final success = await provider.installApp(widget.application.id);
+
+              if (mounted && !success) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Failed to install ${widget.application.name}'),
+                    backgroundColor: Colors.red,
                   ),
-                if (isInstalling) const SizedBox(width: 8),
-                Text(
-                  isInstalling
-                      ? "Installing..."
-                      : (isInstalled ? "Open" : "Get"),
-                  style: TextStyle(
-                    color: isInstalling
-                        ? Colors.white.withValues(alpha: 0.7)
-                        : Colors.white,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
+                );
+              }
+            }
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: 10,
+                sigmaY: 10,
+              ),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24, vertical: 8),
+                decoration: BoxDecoration(
+                  color: isInstalling
+                      ? Colors.grey.withValues(alpha: 0.8)
+                      : Colors.black87,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    width: 1.5,
+                    color: Colors.white.withValues(alpha: 0.3),
                   ),
                 ),
-              ],
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (isInstalling)
+                      AnimatedBuilder(
+                        animation: _rotationAnimation,
+                        builder: (context, child) {
+                          return Transform.rotate(
+                            angle: _rotationAnimation.value * 2.0 *
+                                3.141592653589793,
+                            child: const SizedBox(
+                              width: 14,
+                              height: 14,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    if (isInstalling) const SizedBox(width: 8),
+                    Text(
+                      isInstalling
+                          ? "Installing..."
+                          : (isInstalled ? "Open" : "Get"),
+                      style: TextStyle(
+                        color: isInstalling
+                            ? Colors.white.withValues(alpha: 0.7)
+                            : Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 

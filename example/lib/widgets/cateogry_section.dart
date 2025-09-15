@@ -1,46 +1,28 @@
 import 'package:flatpak_flutter_example/responsive.dart';
 import 'package:flatpak_flutter_example/screens/category_screen.dart';
-import 'package:flatpak_flutter_example/services/search_service.dart';
+import 'package:flatpak_flutter_example/services/AppProvider.dart';
 import 'package:flatpak_flutter_example/widgets/app_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flatpak_flutter/src/messages.g.dart';
+import 'package:provider/provider.dart';
 
 import '../services/flatpak_service.dart';
 
-class CategorySection extends StatefulWidget {
+class CategorySection extends StatelessWidget {
   const CategorySection({
     super.key,
     required this.category_heading,
     required this.apps,
     required this.onTap,
+    required this.onInstall,
+    this.isLoading = false,
   });
 
   final String category_heading;
   final List<Application> apps;
   final Function(Application) onTap;
-
-  @override
-  State<CategorySection> createState() => _CategorySectionState();
-}
-
-class _CategorySectionState extends State<CategorySection> {
-  final FlatpakService _flatpakService = FlatpakService();
-  final SearchService _searchService = SearchService();
-  final Set<String> _installingApps = <String>{};
-  final Map<String, bool> _installationStatus = <String, bool>{};
-
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeInstallationStatus();
-  }
-
-  void _initializeInstallationStatus() {
-    for (final app in widget.apps) {
-      _installationStatus[app.id] = _searchService.isAppInstalled(app);
-    }
-  }
+  final Function(Application) onInstall;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +34,7 @@ class _CategorySectionState extends State<CategorySection> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.category_heading,
+                category_heading,
                 style: TextStyle(
                   color: const Color(0xFF111827),
                   fontSize: Responsive.scale(context, 24).clamp(16, 28),
@@ -64,7 +46,7 @@ class _CategorySectionState extends State<CategorySection> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => CategoryScreen(
-                      category: widget.category_heading,
+                      category: category_heading,
                     ),
                   ),
                 ),
@@ -83,91 +65,142 @@ class _CategorySectionState extends State<CategorySection> {
         const SizedBox(height: 20),
         SizedBox(
           height: 234,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: widget.apps.length,
-            itemBuilder: (context, index) {
-              final item = widget.apps[index];
-              final isInstalling = _installingApps.contains(item.id);
-              final isInstalled = _searchService.isAppInstalled(item);
-
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: AppCard(
-                  application: item,
-                  onTap: () => widget.onTap(item),
-                  onInstall: () => _handleInstallTap(item),
-                  isInstalled: isInstalled,
-                  isInstalling: isInstalling,
-                ),
-              );
-            },
-          ),
-        ),
+          child: _buildContent(context),
+        )
       ],
     );
   }
 
-  Future<void> _handleInstallTap(Application app) async {
-    if (_installingApps.contains(app.id)) {
-      return;
+  Widget _buildContent(BuildContext context) {
+    if (isLoading && apps.isEmpty) {
+      return _buildLoadingState();
     }
 
-    final isInstalled = _searchService.isAppInstalled(app);
-
-    if (isInstalled) {
-      _openApplication(app);
-    } else {
-      await _installApplication(app);
+    if (apps.isEmpty && !isLoading) {
+      return _buildEmptyState();
     }
+
+    return Consumer<AppsProvider>(
+      builder: (context, appsProvider, _) {
+        return ListView.builder(
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          itemCount: apps.length + (isLoading ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (index >= apps.length) {
+              return _buildLoadingCard();
+            }
+
+            final app = apps[index];
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: AppCard(
+                application: app,
+                onTap: () => onTap(app),
+                onInstall: () => onInstall(app),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
-  Future<void> _installApplication(Application app) async {
-    setState(() {
-      _installingApps.add(app.id);
-    });
-
-    try {
-      await _flatpakService.ApplicationInstall(app.id);
-      await Future.delayed(const Duration(seconds: 2));
-      await _searchService.refreshInstallationStatus(app.id);
-
-      if (mounted) {
-        setState(() {
-          _installationStatus[app.id] = true;
-        });
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${app.name} installed successfully!'),
-            backgroundColor: Colors.green,
-            duration: const Duration(seconds: 2),
-          ),
+  Widget _buildLoadingState() {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: _buildLoadingCard(),
         );
-      }
-
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to install ${app.name}: $e'),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 3),
-          ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _installingApps.remove(app.id);
-        });
-      }
-    }
+      },
+    );
   }
 
-  void _openApplication(Application app) {
-    // TODO: Implement app opening logic
+  Widget _buildLoadingCard() {
+    return Container(
+      width: 160,
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            width: 100,
+            height: 16,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: 80,
+            height: 14,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            width: 120,
+            height: 36,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(18),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.apps,
+            size: 48,
+            color: Colors.grey[400],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'No apps available in this category',
+            style: TextStyle(
+              color: Colors.grey[600],
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Pull to refresh or check your connection',
+            style: TextStyle(
+              color: Colors.grey[500],
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
