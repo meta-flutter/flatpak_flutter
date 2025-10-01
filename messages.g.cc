@@ -1011,9 +1011,7 @@ void FlatpakApi::SetUp(
             return;
           }
           const auto& id_arg = std::get<std::string>(encodable_id_arg);
-          const auto& encodable_configuration_arg = args.at(1);
-          const auto* configuration_arg = std::get_if<EncodableMap>(&encodable_configuration_arg);
-          ErrorOr<bool> output = api->ApplicationStart(id_arg, configuration_arg);
+          ErrorOr<bool> output = api->ApplicationStart(id_arg);
           if (output.has_error()) {
             reply(WrapError(output.error()));
             return;

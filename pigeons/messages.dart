@@ -171,7 +171,7 @@ abstract class FlatpakApi {
   bool applicationUninstall(String id);
 
   /// Start application using specified configuration.
-  bool applicationStart(String id, Map<String?, Object?>? configuration);
+  bool applicationStart(String id);
 
   /// Stop application with given id.
   bool applicationStop(String id);

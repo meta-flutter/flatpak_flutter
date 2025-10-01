@@ -392,9 +392,7 @@ class FlatpakApi {
   // Uninstall application with specified id.
   virtual ErrorOr<bool> ApplicationUninstall(const std::string& id) = 0;
   // Start application using specified configuration.
-  virtual ErrorOr<bool> ApplicationStart(
-    const std::string& id,
-    const flutter::EncodableMap* configuration) = 0;
+  virtual ErrorOr<bool> ApplicationStart(const std::string& id) = 0;
   // Stop application with given id.
   virtual ErrorOr<bool> ApplicationStop(const std::string& id) = 0;
 
