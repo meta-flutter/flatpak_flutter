@@ -314,8 +314,19 @@ class AppsProvider extends ChangeNotifier {
   }
 
   Future<bool> openApp(String id) async {
-    // TODO: Implement App start
-    return true;
+    final shortId = _extractAppId(id);
+
+    try{
+      final start = await _flatpakService.ApplicationStart(id);
+
+
+      return start;
+    } catch(e){
+      if (kDebugMode) {
+        print('Error starting app $id: $e');
+      }
+      return false;
+    }
   }
 
   Future<void> refreshInstallationStatus() async {

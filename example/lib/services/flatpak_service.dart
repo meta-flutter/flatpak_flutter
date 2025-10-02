@@ -40,11 +40,11 @@ class FlatpakService {
     return  _api.getSupportedArches();
   }
 
-  Future<bool> ApplicationStart(String id, Map config) async{
-    return _api.applicationStart(id,config.cast<String?, Object?>());
+  Future<bool> ApplicationStart(String id) async{
+    return _api.applicationStart(id);
   }
 
-  Future<bool> ApplicationStop(String id, Map config) async{
+  Future<bool> ApplicationStop(String id) async{
     return _api.applicationStop(id);
   }
 }
