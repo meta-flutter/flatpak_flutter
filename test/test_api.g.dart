@@ -99,7 +99,7 @@ abstract class TestHostFlatpakApi {
   bool applicationUninstall(String id);
 
   /// Start application using specified configuration.
-  bool applicationStart(String id, Map<String?, Object?>? configuration);
+  bool applicationStart(String id);
 
   /// Stop application with given id.
   bool applicationStop(String id);
@@ -359,9 +359,8 @@ abstract class TestHostFlatpakApi {
           final String? arg_id = (args[0] as String?);
           assert(arg_id != null,
               'Argument for dev.flutter.pigeon.flatpak_flutter.FlatpakApi.applicationStart was null, expected non-null String.');
-          final Map<String?, Object?>? arg_configuration = (args[1] as Map<Object?, Object?>?)?.cast<String?, Object?>();
           try {
-            final bool output = api.applicationStart(arg_id!, arg_configuration);
+            final bool output = api.applicationStart(arg_id!);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

@@ -671,7 +671,7 @@ class FlatpakApi {
   }
 
   /// Start application using specified configuration.
-  Future<bool> applicationStart(String id, Map<String?, Object?>? configuration) async {
+  Future<bool> applicationStart(String id) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flatpak_flutter.FlatpakApi.applicationStart$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -679,7 +679,7 @@ class FlatpakApi {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[id, configuration]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[id]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
